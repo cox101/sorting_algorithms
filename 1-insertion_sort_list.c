@@ -24,35 +24,40 @@ int len_list(listint_t *h)
  * @list: Pointer to the head of the doubly linked list.
  */
 
-void insertion_sort_list(listint_t **list);
+void insertion_sort_list(listint_t **list)
 {
+	listint_t *current = NULL, *One = NULL;
+	listint_t *Two = NULL, *Three = NULL, *Four = NULL;
+
 	if (!list || !(*list) || len_list(*list) < 2)
-        return;
+		return;
 
-    listint_t *curr, *prev, *next;
+	current = *list;
 
-    for (curr = (*list)->next; curr; curr = next)
-    {
-        next = curr->next;
+	while (current)
+	{
+		if (current->previous && current->n < current->previous->n)
+		{
+			one = current->previous->prev;
+			two = current->previous;
+			three = current;
+			four = current->next;
 
-        while (curr->prev && curr->n < curr->prev->n)
-        {
-            prev = curr->prev;
-            prev->next = curr->next;
-
-            if (curr->next)
-                curr->next->prev = prev;
-
-            curr->next = prev;
-            curr->prev = prev->prev;
-            prev->prev = curr;
-
-            if (curr->prev)
-                curr->prev->next = curr;
-            else
-                *list = curr;
-
-            print_list(*list);
-        }
-    }
+			two->next = four;
+			if (four)
+				four->previous = two;
+			three->next = two;
+			three->previous = one;
+			if (one)
+				one->next = three;
+			else
+				*list = three;
+			two->previous = three;
+			current = *list;
+			print_list(*list);
+			continue;
+		}
+		else
+			current = current->next;
+	}
 }
