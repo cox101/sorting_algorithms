@@ -19,7 +19,7 @@ int len_list(listint_t *h)
 }
 
 /**
- * insertion_sort_list - Sorts a doubly linked list of integers in ascending order
+ * insertion_sort_list - Sorts a doubly linked list of int in ascending order
  *                       using the Insertion Sort algorithm.
  * @list: Pointer to the head of the doubly linked list.
  */
