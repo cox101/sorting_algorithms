@@ -38,21 +38,21 @@ void insertion_sort_list(listint_t **list)
 	{
 		if (current->previous && current->n < current->previous->n)
 		{
-			one = current->previous->prev;
-			two = current->previous;
-			three = current;
-			four = current->next;
+			One = current->previous->previous;
+			Two = current->previous;
+			Three = current;
+			Four = current->next;
 
-			two->next = four;
-			if (four)
-				four->previous = two;
-			three->next = two;
-			three->previous = one;
-			if (one)
-				one->next = three;
+			Two->next = Four;
+			if (Four)
+				Four->previous = Two;
+			Three->next = Two;
+			Three->previous = One;
+			if (One)
+				One->next = Three;
 			else
-				*list = three;
-			two->previous = three;
+				*list = Three;
+			Two->previous = Three;
 			current = *list;
 			print_list(*list);
 			continue;
