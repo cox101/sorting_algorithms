@@ -1,29 +1,46 @@
 #include "sort.h"
-#include <stdio.h>
+
+/**
+ * len_list -return the length of the linked list
+ * @h: pointer to list
+ * Return: length of the list
+ */
+
+int len_list(listint_t *h)
+{
+	int length = 0;
+
+	while (h)
+	{
+		length++;
+		h = h->next;
+	}
+	return (length);
+}
 
 /**
  * insertion_sort_list - Sorts a doubly linked list of integers in ascending order
  *                       using the Insertion Sort algorithm.
  * @list: Pointer to the head of the doubly linked list.
  */
-void insertion_sort_list(listint_t **list)
+
+void insertion_sort_list(listint_t **list);
 {
-    if (list == NULL || *list == NULL || (*list)->next == NULL)
+	 if (list == NULL || *list == NULL)
         return;
 
-    listint_t *sorted = NULL;  /* Pointer to the sorted part of the list */
+    listint_t *sorted = NULL;
     listint_t *current = *list;
-    listint_t *next_node;
+    listint_t *next;
 
     while (current != NULL)
     {
-        next_node = current->next;
+        next = current->next;
+        current->prev = current->next = NULL;
 
         if (sorted == NULL || sorted->n >= current->n)
         {
-            /* Insert at the beginning of the sorted list or create a new sorted list */
             current->next = sorted;
-            current->prev = NULL;
             if (sorted != NULL)
                 sorted->prev = current;
             sorted = current;
@@ -32,26 +49,21 @@ void insertion_sort_list(listint_t **list)
         {
             listint_t *temp = sorted;
 
-            /* Traverse the sorted list to find the right position for the current node */
             while (temp->next != NULL && temp->next->n < current->n)
                 temp = temp->next;
 
-            /* Insert the current node into the sorted list */
             current->next = temp->next;
             if (temp->next != NULL)
                 temp->next->prev = current;
-            current->prev = temp;
+
             temp->next = current;
+            current->prev = temp;
         }
 
-        /* Move to the next node in the original list */
-        current = next_node;
+        print_list(sorted);
 
-        /* Print the current state of the doubly linked list after each insertion */
-        print_list(*list);
+        current = next;
     }
 
-    /* Update the head of the list to point to the sorted part */
     *list = sorted;
 }
-
