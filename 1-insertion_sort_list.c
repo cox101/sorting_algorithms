@@ -1,50 +1,60 @@
 #include "sort.h"
 
 /**
- * insertion_sort_list - Sorts a doubly linked list in asc order using
- *                        the Insertion Sort algorithm.
- * @list: Double pointer to the head of the linked list.
+ * len_list - returns the length of a linked list
+ * @h: pointer to the list
+ *
+ * Return: length of list
+ */
+int len_list(listint_t *h)
+{
+    int len = 0;
+
+    while (h)
+    {
+        len++;
+        h = h->next;
+    }
+    return (len);
+}
+
+/**
+ * insertion_sort_list - sorts a linked list with the Insert Sort algorithm
+ * @list: double pointer to the list to sort
  */
 void insertion_sort_list(listint_t **list)
 {
+    if (!list || !(*list) || len_list(*list) < 2)
+        return;
 
-	if (list == NULL || *list == NULL || (*list)->next == NULL)
+    listint_t *current = *list;
 
-		return;
+    while (current)
+    {
+        if (current->prev && current->n < current->prev->n)
+        {
+            listint_t *prev_prev = current->prev->prev;
+            listint_t *prev = current->prev;
+            listint_t *current_node = current;
+            listint_t *next_node = current->next;
 
-	listint_t *sorted = NULL;
-	listint_t *unsorted = *list;
-	listint_t *next;
-
-	while (unsorted != NULL)
-	{
-		next = unsorted->next;
-
-		if (sorted == NULL || sorted->n >= unsorted->n)
-		{
-			unsorted->next = sorted;
-			unsorted->prev = NULL;
-			if (sorted != NULL)
-				sorted->prev = unsorted;
-			sorted = unsorted;
-		}
-
-		else
-		{
-
-			listint_t *current = sorted;
-
-			while (current->next != NULL && current->next->n < unsorted->n)
-				current = current->next;
-			unsorted->next = current->next;
-			unsorted->prev = current;
-			if (current->next != NULL)
-				current->next->prev = unsorted;
-			current->next = unsorted;
-		}
-
-		unsorted = next;
-		print_list(sorted);
-	}
-	*list = sorted;
+            prev->next = next_node;
+            if (next_node)
+                next_node->prev = prev;
+            current_node->next = prev;
+            current_node->prev = prev_prev;
+            if (prev_prev)
+                prev_prev->next = current_node;
+            else
+                *list = current_node;
+            prev->prev = current_node;
+            current = *list;
+            print_list(*list);
+        }
+        else
+        {
+            current = current->next;
+        }
+    }
 }
+
