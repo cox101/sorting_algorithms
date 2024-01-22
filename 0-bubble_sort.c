@@ -9,20 +9,32 @@ void swap(int *a, int *b) {
 }
 
 /**
- * bubble_sort - sorts an array in ascending order
- * @array: array of ints to sort
- * @size: size of the array
+ * bubble_sort - Sort an array of integers in ascending order.
+ * @array: An array of integers to sort.
+ * @size: The size of the array.
+ *
+ * Description: Prints the array after each swap.
  */
+void bubble_sort(int *array, size_t size)
+{
+    size_t i, len = size;
+    bool swapped = false;
 
-void bubble_sort(int *array, size_t size) {
-    if (array == NULL || size <= 1)
+    if (array == NULL || size < 2)
         return;
 
-    for (size_t i = 0; i < size - 1; i++) {
-        for (size_t j = 0; j < size - 1 - i; j++) {
-            if (array[j] > array[j + 1]) {
-                swap(&array[j], &array[j + 1]);
+    do
+    {
+        swapped = false;
+        for (i = 0; i < len - 1; i++)
+        {
+            if (array[i] > array[i + 1])
+            {
+                swap_ints(array + i, array + i + 1);
+                print_array(array, size);
+                swapped = true;
             }
         }
-    }
+        len--;
+    } while (swapped);
 }
