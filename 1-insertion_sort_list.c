@@ -26,44 +26,33 @@ int len_list(listint_t *h)
 
 void insertion_sort_list(listint_t **list);
 {
-	 if (list == NULL || *list == NULL)
+	if (!list || !(*list) || len_list(*list) < 2)
         return;
 
-    listint_t *sorted = NULL;
-    listint_t *current = *list;
-    listint_t *next;
+    listint_t *curr, *prev, *next;
 
-    while (current != NULL)
+    for (curr = (*list)->next; curr; curr = next)
     {
-        next = current->next;
-        current->prev = current->next = NULL;
+        next = curr->next;
 
-        if (sorted == NULL || sorted->n >= current->n)
+        while (curr->prev && curr->n < curr->prev->n)
         {
-            current->next = sorted;
-            if (sorted != NULL)
-                sorted->prev = current;
-            sorted = current;
+            prev = curr->prev;
+            prev->next = curr->next;
+
+            if (curr->next)
+                curr->next->prev = prev;
+
+            curr->next = prev;
+            curr->prev = prev->prev;
+            prev->prev = curr;
+
+            if (curr->prev)
+                curr->prev->next = curr;
+            else
+                *list = curr;
+
+            print_list(*list);
         }
-        else
-        {
-            listint_t *temp = sorted;
-
-            while (temp->next != NULL && temp->next->n < current->n)
-                temp = temp->next;
-
-            current->next = temp->next;
-            if (temp->next != NULL)
-                temp->next->prev = current;
-
-            temp->next = current;
-            current->prev = temp;
-        }
-
-        print_list(sorted);
-
-        current = next;
     }
-
-    *list = sorted;
 }
