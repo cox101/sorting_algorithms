@@ -1,63 +1,50 @@
 #include "sort.h"
 
 /**
- * len_list -return the length of the linked list
- * @h: pointer to list
- * Return: length of the list
+ * insertion_sort_list - Sorts a doubly linked list in asc order using
+ *                        the Insertion Sort algorithm.
+ * @list: Double pointer to the head of the linked list.
  */
-
-int len_list(listint_t *h)
-{
-	int length = 0;
-
-	while (h)
-	{
-		length++;
-		h = h->next;
-	}
-	return (length);
-}
-
-/**
- * insertion_sort_list - Sorts a doubly linked list of int in ascending order
- *                       using the Insertion Sort algorithm.
- * @list: Pointer to the head of the doubly linked list.
- */
-
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *current = NULL, *One = NULL;
-	listint_t *Two = NULL, *Three = NULL, *Four = NULL;
 
-	if (!list || !(*list) || len_list(*list) < 2)
+	if (list == NULL || *list == NULL || (*list)->next == NULL)
+
 		return;
 
-	current = *list;
+	listint_t *sorted = NULL;
+	listint_t *unsorted = *list;
+	listint_t *next;
 
-	while (current)
+	while (unsorted != NULL)
 	{
-		if (current->previous && current->n < current->previous->n)
-		{
-			One = current->previous->previous;
-			Two = current->previous;
-			Three = current;
-			Four = current->next;
+		next = unsorted->next;
 
-			Two->next = Four;
-			if (Four)
-				Four->previous = Two;
-			Three->next = Two;
-			Three->previous = One;
-			if (One)
-				One->next = Three;
-			else
-				*list = Three;
-			Two->previous = Three;
-			current = *list;
-			print_list(*list);
-			continue;
+		if (sorted == NULL || sorted->n >= unsorted->n)
+		{
+			unsorted->next = sorted;
+			unsorted->prev = NULL;
+			if (sorted != NULL)
+				sorted->prev = unsorted;
+			sorted = unsorted;
 		}
+
 		else
-			current = current->next;
+		{
+
+			listint_t *current = sorted;
+
+			while (current->next != NULL && current->next->n < unsorted->n)
+				current = current->next;
+			unsorted->next = current->next;
+			unsorted->prev = current;
+			if (current->next != NULL)
+				current->next->prev = unsorted;
+			current->next = unsorted;
+		}
+
+		unsorted = next;
+		print_list(sorted);
 	}
+	*list = sorted;
 }
