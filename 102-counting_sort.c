@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 /**
- * counting_sort - sorts an array using the Counting Sort algorithm
+ * counting_sort - sorts an array using counting sort algorithm
  * @array: array to sort
  * @size: size of the array
  */
@@ -20,46 +20,36 @@ void counting_sort(int *array, size_t size)
             max = array[i];
     }
 
-    /* Create a counting array of size max + 1 and initialize it */
-    int *count = malloc((max + 1) * sizeof(int));
-    if (count == NULL)
+    /* Create and initialize the counting array */
+    int *counting_array = malloc((max + 1) * sizeof(int));
+    if (counting_array == NULL)
         return;
 
     for (int i = 0; i <= max; i++)
-        count[i] = 0;
+        counting_array[i] = 0;
 
-    /* Count occurrences of each element in the original array */
+    /* Populate the counting array */
     for (size_t i = 0; i < size; i++)
-        count[array[i]]++;
-
-    /* Update count array to store the position of each element */
-    for (int i = 1; i <= max; i++)
-        count[i] += count[i - 1];
-
-    /* Create a sorted array using the count array */
-    int *sorted = malloc(size * sizeof(int));
-    if (sorted == NULL)
-    {
-        free(count);
-        return;
-    }
-
-    for (int i = size - 1; i >= 0; i--)
-    {
-        sorted[count[array[i]] - 1] = array[i];
-        count[array[i]]--;
-    }
-
-    /* Copy the sorted array back to the original array */
-    for (size_t i = 0; i < size; i++)
-        array[i] = sorted[i];
+        counting_array[array[i]]++;
 
     /* Print the counting array */
-    printf("Array after counting: ");
+    printf("Counting array:");
     for (int i = 0; i <= max; i++)
-        printf("%d%s", count[i], (i == max) ? "\n" : ", ");
+        printf(" %d", counting_array[i]);
+    printf("\n");
 
-    free(count);
-    free(sorted);
+    /* Update the original array with sorted values */
+    size_t j = 0;
+    for (int i = 0; i <= max; i++)
+    {
+        while (counting_array[i] > 0)
+        {
+            array[j++] = i;
+            counting_array[i]--;
+        }
+    }
+
+    /* Free the counting array */
+    free(counting_array);
 }
 
