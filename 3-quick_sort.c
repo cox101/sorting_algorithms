@@ -1,71 +1,80 @@
 #include "sort.h"
 
-void swap(int *x, int *y);
-
-void quicksort_recursion(int array[], int low, int high);
-
-int partition(int array[], int low, int high);
-
 /**
- * swap - swaps two elements of an array to facilitate sorting
- * @x: pointer to an element of the array
- * @y: pointer to an element of the array
- */
-void swap(int *x, int *y)
+ * swap - swaps 2 ints
+ * @a: the first int
+ * @b: the second int
+ * Return: void
+*/
+void swap(int *a, int *b)
 {
-	int temp = *x;
-	*x = *y;
-	*y = temp;
+	int temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
 }
 
 /**
- * quicksort - Initializes the quicksort_recursion function
- * @array: The array to be sorted
- * @size: The size of the array to be sorted
- */
-void quicksort(int *array, size_t size)
+ * partition - splits the array to 2 parts, where pivot is in the middle
+ * @array: the array to sort
+ * @size: the size of the array
+ * @low: the lowest index in the sub array to sort
+ * @high: the highes index in the sub array to sort
+ * Return: the index of the pivot
+*/
+int partition(int *array, size_t size, int low, int high)
 {
-	quicksort_recursion(array, 0, length - 1);
-}
+	int pivot, i = low, j;
 
-/**
- * quicksort_recursion - recursively sorts the array
- * @array: An array to be sorted
- * @low: The index of the first element of the array to be sorted
- * @high: The index of the last element of the array to be sorted
- */
-void quicksort_recursion(int array[], int low, int high)
-{
-	if (low < high)
+	pivot = array[high];
+	for (j = low; j < high; j++)
 	{
-		int pivot_index = partition(array, low, high);
-
-		quicksort_recursion(array, low, pivot_index - 1);
-		quicksort_recursion(array, pivot_index + 1, high);
-	}
-}
-
-/**
- * partition - Carries out the step of partitioning the array for sorting.
- * @array: An array
- * @low: The lower index of the array to be partitioned
- * @high: The highest index of the array to be partitioned
- * Return: The pivotal index
- */
-int partition(int array[], int low, int high)
-{
-	int pivot_value = array[high];
-	int i = low;
-
-	for (int j = low; j < high; j++)
-	{
-		if (array[j] <= pivot_value)
+		if (array[j] <= pivot)
 		{
-			swap(&array[i], &array[j]);
+			if (j != i)
+			{
+				swap(&array[j], &array[i]);
+				print_array(array, size);
+			}
 			i++;
 		}
 	}
-	swap(&array[i], &array[high]);
-
+	if (i != high)
+	{
+		swap(&array[high], &array[i]);
+		print_array(array, size);
+	}
 	return (i);
 }
+/**
+ * quick_sorting - the quick sort algorithm
+ * @array: the array to sort
+ * @size: the size of the array
+ * @low: the lowest index in the sub array to sort
+ * @high: the highes value in the sub array to sort
+ * Return: void
+*/
+void quick_sorting(int *array, size_t size, int low, int high)
+{
+	int part;
+
+	if (low >= high)
+	{
+		return;
+	}
+	part = partition(array, size, low, high);
+	quick_sorting(array, size, low, part - 1);
+	quick_sorting(array, size, part + 1, high);
+}
+/**
+ * quick_sort - a wrapper function for the quick sort algorithm
+ * @array: the array to sort
+ * @size: the size of the array
+ * Return: void
+*/
+void quick_sort(int *array, size_t size)
+{
+	quick_sorting(array, size, 0, size - 1);
+}
+
