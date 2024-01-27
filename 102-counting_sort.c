@@ -1,11 +1,11 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "sort.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 /**
- * counting_sort - Sorts an array using Counting Sort algorithm
- * @array: Array to be sorted
- * @size: Size of the array
+ * counting_sort - sorts an array using counting sort algorithm
+ * @array: array to sort
+ * @size: size of the array
  */
 void counting_sort(int *array, size_t size)
 {
@@ -20,36 +20,36 @@ void counting_sort(int *array, size_t size)
             max = array[i];
     }
 
-    /* Create counting array and initialize to 0 */
-    int *count_array = malloc((max + 1) * sizeof(int));
-    if (count_array == NULL)
+    /* Create and initialize the counting array */
+    int *counting_array = malloc((max + 1) * sizeof(int));
+    if (counting_array == NULL)
         return;
 
     for (int i = 0; i <= max; i++)
-        count_array[i] = 0;
+        counting_array[i] = 0;
 
     /* Populate the counting array */
     for (size_t i = 0; i < size; i++)
-        count_array[array[i]]++;
+        counting_array[array[i]]++;
 
     /* Print the counting array */
     printf("Counting array:");
     for (int i = 0; i <= max; i++)
-        printf(" %d", count_array[i]);
+        printf(" %d", counting_array[i]);
     printf("\n");
 
     /* Update the original array with sorted values */
     size_t j = 0;
     for (int i = 0; i <= max; i++)
     {
-        while (count_array[i] > 0)
+        while (counting_array[i] > 0)
         {
             array[j++] = i;
-            count_array[i]--;
+            counting_array[i]--;
         }
     }
 
     /* Free the counting array */
-    free(count_array);
+    free(counting_array);
 }
 
