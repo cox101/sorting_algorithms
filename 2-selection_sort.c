@@ -1,41 +1,60 @@
 #include "sort.h"
-#include <stdio.h>
 
 /**
- * selection_sort - Sorts an array of integers in ascending order
- *                   using the Selection sort algorithm.
- * @array: Array to be sorted.
- * @size: Size of the array.
- */
+ * swap - swaps 2 values
+ * @a: the first int
+ * @b: the seconde int
+ * Reuturn: void
+*/
+void swap(int *a, int *b)
+{
+	int temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+/**
+ * get_min_index - gets the minimum index for a sub array
+ * @array: the array to sort
+ * @start: the starting index of the sub array
+ * @size: the size of the array
+ * Return: min_index
+*/
+size_t get_min_index(int *array, int start, size_t size)
+{
+	size_t i, min_index;
+	int min_value;
+
+	min_value = array[start];
+	min_index = start;
+	for (i = start + 1; i < size; i++)
+	{
+		if (array[i] < min_value)
+		{
+			min_value = array[i];
+			min_index = i;
+		}
+	}
+	return (min_index);
+}
+/**
+ * selection_sort - sorts an array using selection sort algorithm
+ * @array: the array to sort
+ * @size: the size of the array
+ * Return: void
+*/
 void selection_sort(int *array, size_t size)
 {
-    if (array == NULL || size < 2)
-        return;
+	size_t i, min_index;
 
-    size_t i, j, min_index;
-    int temp;
-
-    for (i = 0; i < size - 1; i++)
-    {
-        min_index = i;
-
-        for (j = i + 1; j < size; j++)
-        {
-            if (array[j] < array[min_index])
-                min_index = j;
-        }
-
-        if (min_index != i)
-        {
-            /* Swap array[i] and array[min_index] */
-            temp = array[i];
-            array[i] = array[min_index];
-            array[min_index] = temp;
-
-            /* Print array after each swap */
-            for (j = 0; j < size - 1; j++)
-                printf("%d, ", array[j]);
-            printf("%d\n", array[j]);
-        }
-    }
+	for (i = 0; i < size; i++)
+	{
+		min_index = get_min_index(array, i, size);
+		if (i != min_index)
+		{
+			swap(&array[i], &array[min_index]);
+			print_array(array, size);
+		}
+	}
 }

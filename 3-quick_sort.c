@@ -1,71 +1,87 @@
 #include "sort.h"
 
-void swap(int *x, int *y);
-
-void quicksort_recursion(int array[], int low, int high);
-
-int partition(int array[], int low, int high);
+void swap(int *a, int *b);
 
 /**
- * swap - swaps two elements of an array to facilitate sorting
- * @x: pointer to an element of the array
- * @y: pointer to an element of the array
+ * quick_sort - function that sorts an array of integers
+ * in ascending order using the Quick sort algorithm
+ * @array: pointer to the array to sort
+ * @size: size of the array
+ * Return: nothing void
  */
-void swap(int *x, int *y)
+
+void quick_sort(int *array, size_t size)
 {
-	int temp = *x;
-	*x = *y;
-	*y = temp;
+	if (array == NULL || size < 2)
+		return;
+
+	quick_recursion(array, 0, size - 1, size);
 }
 
 /**
- * quicksort - Initializes the quicksort_recursion function
- * @array: The array to be sorted
- * @size: The size of the array to be sorted
+ * quick_recursion - function that sorts an array of integers
+ * in ascending order using the Quick sort algorithm
+ * @array: pointer to the array to sort
+ * @low: start of the array
+ * @high: end of the array
+ * @size: size of the array
+ * Return: nothing void
  */
-void quicksort(int *array, size_t size)
-{
-	quicksort_recursion(array, 0, length - 1);
-}
 
-/**
- * quicksort_recursion - recursively sorts the array
- * @array: An array to be sorted
- * @low: The index of the first element of the array to be sorted
- * @high: The index of the last element of the array to be sorted
- */
-void quicksort_recursion(int array[], int low, int high)
+void quick_recursion(int *array, int low, int high, size_t size)
 {
+	int index;
+
 	if (low < high)
 	{
-		int pivot_index = partition(array, low, high);
-
-		quicksort_recursion(array, low, pivot_index - 1);
-		quicksort_recursion(array, pivot_index + 1, high);
+		index = partition(array, low, high, size);
+		quick_recursion(array, low, index - 1, size);
+		quick_recursion(array, index + 1, high, size);
 	}
 }
 
 /**
- * partition - Carries out the step of partitioning the array for sorting.
- * @array: An array
- * @low: The lower index of the array to be partitioned
- * @high: The highest index of the array to be partitioned
- * Return: The pivotal index
+ * swap - function that swap value
+ * @a: pointer to the first value
+ * @b: pointer to the second value
+ * Return: nothing void
  */
-int partition(int array[], int low, int high)
-{
-	int pivot_value = array[high];
-	int i = low;
 
-	for (int j = low; j < high; j++)
+void swap(int *a, int *b)
+{
+	int tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+/**
+ * partition - function that partition an array of int
+ * and swap the value
+ * @array: array to partition
+ * @low: beggining of the array
+ * @high: end of the array
+ * @size: size of the array
+ * Return: returns the nwes index oh the value
+ */
+int partition(int *array, int low, int high, size_t size)
+{
+	int pivot = array[high];
+	int i = (low - 1);
+	int j;
+
+	for (j = low; j <= high; j++)
 	{
-		if (array[j] <= pivot_value)
+		if (array[j] <= pivot)
 		{
-			swap(&array[i], &array[j]);
 			i++;
+			if (i != j)
+			{
+				swap(&array[i], &array[j]);
+				print_array(array, size);
+			}
 		}
 	}
-	swap(&array[i], &array[high]);
-
 	return (i);
 }
