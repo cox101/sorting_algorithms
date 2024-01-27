@@ -1,16 +1,18 @@
-#include "sort.h"
+#include <stdio.h>
 #include <stdlib.h>
+#include "sort.h"
 
 /**
- * counting_sort - sorts an array using the Counting sort algorithm
- * @array: array to sort
- * @size: size of the array
+ * counting_sort - Sorts an array using Counting Sort algorithm
+ * @array: Array to be sorted
+ * @size: Size of the array
  */
 void counting_sort(int *array, size_t size)
 {
-    if (size < 2)
+    if (array == NULL || size < 2)
         return;
 
+    /* Find the maximum value in the array */
     int max = array[0];
     for (size_t i = 1; i < size; i++)
     {
@@ -18,37 +20,36 @@ void counting_sort(int *array, size_t size)
             max = array[i];
     }
 
-    int *count_arr = malloc(sizeof(int) * (max + 1));
-    int *out_arr = malloc(sizeof(int) * size);
-
-    if (!count_arr || !out_arr)
-    {
-        free(count_arr);
-        free(out_arr);
+    /* Create counting array and initialize to 0 */
+    int *count_array = malloc((max + 1) * sizeof(int));
+    if (count_array == NULL)
         return;
-    }
 
-    for (int j = 0; j <= max; j++)
-        count_arr[j] = 0;
+    for (int i = 0; i <= max; i++)
+        count_array[i] = 0;
 
-    for (size_t k = 0; k < size; k++)
-        count_arr[array[k]]++;
+    /* Populate the counting array */
+    for (size_t i = 0; i < size; i++)
+        count_array[array[i]]++;
 
-    print_array(count_arr, max + 1);
+    /* Print the counting array */
+    printf("Counting array:");
+    for (int i = 0; i <= max; i++)
+        printf(" %d", count_array[i]);
+    printf("\n");
 
-    for (int l = 1; l <= max; l++)
-        count_arr[l] += count_arr[l - 1];
-
-    for (size_t m = 0; m < size; m++)
+    /* Update the original array with sorted values */
+    size_t j = 0;
+    for (int i = 0; i <= max; i++)
     {
-        out_arr[count_arr[array[m]] - 1] = array[m];
-        count_arr[array[m]]--;
+        while (count_array[i] > 0)
+        {
+            array[j++] = i;
+            count_array[i]--;
+        }
     }
 
-    for (size_t n = 0; n < size; n++)
-        array[n] = out_arr[n];
-
-    free(count_arr);
-    free(out_arr);
+    /* Free the counting array */
+    free(count_array);
 }
 
