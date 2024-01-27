@@ -1,6 +1,5 @@
 #include "sort.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 /**
  * counting_sort - sorts an array using counting sort algorithm
@@ -20,36 +19,41 @@ void counting_sort(int *array, size_t size)
             max = array[i];
     }
 
-    /* Create and initialize the counting array */
-    int *counting_array = malloc((max + 1) * sizeof(int));
-    if (counting_array == NULL)
-        return;
+    /* Allocate memory for counting and output arrays */
+    int *count_arr = malloc((max + 1) * sizeof(int));
+    int *out_arr = malloc(size * sizeof(int));
 
-    for (int i = 0; i <= max; i++)
-        counting_array[i] = 0;
-
-    /* Populate the counting array */
-    for (size_t i = 0; i < size; i++)
-        counting_array[array[i]]++;
-
-    /* Print the counting array */
-    printf("Counting array:");
-    for (int i = 0; i <= max; i++)
-        printf(" %d", counting_array[i]);
-    printf("\n");
-
-    /* Update the original array with sorted values */
-    size_t j = 0;
-    for (int i = 0; i <= max; i++)
+    if (count_arr == NULL || out_arr == NULL)
     {
-        while (counting_array[i] > 0)
-        {
-            array[j++] = i;
-            counting_array[i]--;
-        }
+        free(count_arr);
+        free(out_arr);
+        return;
     }
 
-    /* Free the counting array */
-    free(counting_array);
+    /* Initialize counting array to zero */
+    for (int i = 0; i <= max; i++)
+        count_arr[i] = 0;
+
+    /* Populate the counting array */
+    for (size_t k = 0; k < size; k++)
+        count_arr[array[k]]++;
+
+    /* Print the counting array */
+    print_array(count_arr, max + 1);
+
+    /* Update the original array with sorted values */
+    for (size_t m = 0; m < size; m++)
+    {
+        out_arr[count_arr[array[m]] - 1] = array[m];
+        count_arr[array[m]]--;
+    }
+
+    /* Copy the sorted elements back to the original array */
+    for (size_t n = 0; n < size; n++)
+        array[n] = out_arr[n];
+
+    /* Free allocated memory */
+    free(count_arr);
+    free(out_arr);
 }
 
