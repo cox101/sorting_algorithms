@@ -1,74 +1,77 @@
 #include "sort.h"
 
 /**
- * quick_sort_hoare - sorts an array using the Quicksort algorithm (Hoare)
- * @array: array of integers to sort
- * @size: size of the array
+ * quick_sort_hoare - Sorts an array using the Quick sort algorithm (Hoare partition scheme).
+ * @array: Array of integers to sort.
+ * @size: Size of the array.
  */
 void quick_sort_hoare(int *array, size_t size)
 {
-    if (size < 2)
-        return;
+	if (size < 2)
+		return;
 
-    quicksort_hoare(array, 0, (int)size - 1, size);
+	quick_sort_recursive(array, 0, (int)size - 1, size);
 }
 
 /**
- * quicksort_hoare - recursive helper function for Quicksort (Hoare)
- * @array: array to sort
- * @left: index of the left element
- * @right: index of the right element
- * @size: size of the array
+ * quick_sort_recursive - Recursive helper function for Quick sort (Hoare partition scheme).
+ * @array: Array to sort.
+ * @left: Index of the left element.
+ * @right: Index of the right element.
+ * @size: Size of the array.
  */
-void quicksort_hoare(int *array, int left, int right, size_t size)
+void quick_sort_recursive(int *array, int left, int right, size_t size)
 {
-    int pivot;
+	int pivot_index;
 
-    if (left < right)
-    {
-        pivot = hoare_partition(array, left, right, size);
-        quicksort_hoare(array, left, pivot, size);
-        quicksort_hoare(array, pivot + 1, right, size);
-    }
+	if (left < right)
+	{
+		pivot_index = partition(array, left, right, size);
+		quick_sort_recursive(array, left, pivot_index - 1, size);
+		quick_sort_recursive(array, pivot_index, right, size);
+	}
 }
 
 /**
- * hoare_partition - performs the Hoare partition scheme for Quicksort
- * @array: array to partition
- * @left: starting index of the partition
- * @right: ending index of the partition
- * @size: size of the array
- * Return: index of the pivot after partition
+ * partition - Finds the pivot index for Quick sort (Hoare partition scheme).
+ * @array: Array to find the pivot in.
+ * @left: Index of the left element.
+ * @right: Index of the right element.
+ * @size: Size of the array.
+ *
+ * Return: The index of the pivot element.
  */
-int hoare_partition(int *array, int left, int right, size_t size)
+int partition(int *array, int left, int right, size_t size)
 {
-    int tmp, pivot = array[right];
-    int i = left - 1;
-    int j = right + 1;
+	int tmp, pivot = array[right];
+	size_t i, j;
 
-    while (1)
-    {
-        do
-        {
-            i++;
-        } while (array[i] < pivot);
+	i = left - 1;
+	j = right + 1;
 
-        do
-        {
-            j--;
-        } while (array[j] > pivot);
+	while (1)
+	{
+		do {
+			i++;
+		} while (array[i] < pivot);
 
-        if (i >= j)
-            return i;
+		do {
+			j--;
+		} while (array[j] > pivot);
 
-        if (i != j)
-        {
-            tmp = array[i];
-            array[i] = array[j];
-            array[j] = tmp;
-            print_array(array, size);
-        }
-    }
-    return 0;
+		if (i >= j)
+			return i;
+
+		if (i != j)
+		{
+			tmp = array[i];
+			array[i] = array[j];
+			array[j] = tmp;
+			print_array(array, size);
+		}
+	}
+
+	/* The return statement above ensures this line is unreachable. */
+	return 0;
 }
 
